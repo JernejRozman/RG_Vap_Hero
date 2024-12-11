@@ -23,6 +23,7 @@ Primer pretvorbe zvočnega posnetka v format Opus z orodjem ffmpeg (kvaliteto la
 ffmpeg -i audio.mp3 -c:a libopus -b:a 64k audio.opus
 
 <br>
+
 # Video
 Omejite ločljivost videa
 Omejite slikovno hitrost videa
@@ -36,7 +37,8 @@ AV1 (pogosto v vsebniku MKV) je odprt format, naslednik VP9, pri dani kvaliteti 
 Primer pretvorbe videa v format H.264 z orodjem ffmpeg (kvaliteto lahko uravnavate z -crf, -b:v ipd.):
 ffmpeg -i video.mov -c:v libx264 -s 1280x720 -crf 30 video.mp4
 
-<br>
+<br> 
+
 # Poligonski modeli
 Omejite količino oglišč in trikotnikov (npr. z uporabo Blender decimate modifier)
 Objekte podvajajte brez podvajanja geometrije (Blender Alt-D namesto Shift-D)
