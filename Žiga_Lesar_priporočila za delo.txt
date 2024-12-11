@@ -1,0 +1,22 @@
+Deli seminarja:
+
+- Kamera 
+	=> First Person (vidi se tulc vapa)
+	=> Third person (vidi se 3D oseba, kamera zadaj)
+
+- Interakcija curka s trikotniki
+
+	=> Rešitev iz prvih vaj
+	=> Pohitritvena struktura
+		=> Drevesna struktura
+
+- Blat na 3D modelih
+
+	=> posebna sivinska tekstura z njo določena količina umazanije (od 1 črn => 0 bele) 
+		zakodirana ena sama tekstu v senčiniku
+		=> Interpoliramo med čistim materialom in umazanim materialom
+
+		Avto ma čisto in umazano teksturo in vsem interpolacija, kje se zej pojavi čista in umazana
+		to določimo s sivinko tekstuko
+		=> Faktor umazanije od 0 do 1, => Linearna interpoliacija
+
