@@ -1,0 +1,1 @@
+import {Game} from "Vap_hero\game\scripts\Game.js"
