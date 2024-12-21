@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
     <title>Vap Hero</title>
-
-    <!-- Nalosv za CSS glavne strani-->
-    <link rel="stylesheet" href="style.css">
-    <!-- Nalagalnik igre-->
-    <link rel="module" href="main.js">
+    <script type="importmap">
+    {
+        "imports": {
+            "engine/": "../../../engine/",
+            "dat": "../../../lib/dat.js",
+            "glm": "../../../lib/glm.js"
+        }
+    }
+    </script>
+    <script type="module" src="main.js"></script>
+    <link rel="stylesheet" href="style/style.css">
 </head>
 <body>
-    <h1> Vap Hero</h1>
-    <p> Game coming soon ....</p>
-
-    <div class="div_platna">
-        <canvas class="platno"></canvas>
+    <div class="fullscreen no-touch pixelated">
+        <canvas></canvas>
     </div>
 </body>
 </html>

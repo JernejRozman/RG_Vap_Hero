@@ -31,7 +31,9 @@ struct MaterialUniforms {
 }
 
 @group(0) @binding(0) var<uniform> camera: CameraUniforms;
+
 @group(1) @binding(0) var<uniform> model: ModelUniforms;
+
 @group(2) @binding(0) var<uniform> material: MaterialUniforms;
 @group(2) @binding(1) var baseTexture: texture_2d<f32>;
 @group(2) @binding(2) var baseSampler: sampler;

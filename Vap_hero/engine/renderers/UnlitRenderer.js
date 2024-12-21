@@ -2,13 +2,12 @@ import { mat4 } from 'glm';
 
 import * as WebGPU from '../WebGPU.js';
 
-import { Camera } from '../core.js';
+import { Camera, Model } from '../core.js';
 
 import {
     getLocalModelMatrix,
     getGlobalViewMatrix,
     getProjectionMatrix,
-    getModels,
 } from '../core/SceneUtils.js';
 
 import { BaseRenderer } from './BaseRenderer.js';
@@ -48,12 +47,10 @@ export class UnlitRenderer extends BaseRenderer {
             layout: 'auto',
             vertex: {
                 module,
-                entryPoint: 'vertex',
                 buffers: [ vertexBufferLayout ],
             },
             fragment: {
                 module,
-                entryPoint: 'fragment',
                 targets: [{ format: this.format }],
             },
             depthStencil: {
@@ -199,14 +196,14 @@ export class UnlitRenderer extends BaseRenderer {
     renderNode(node, modelMatrix = mat4.create()) {
         const localMatrix = getLocalModelMatrix(node);
         modelMatrix = mat4.multiply(mat4.create(), modelMatrix, localMatrix);
+        const normalMatrix = mat4.normalFromMat4(mat4.create(), modelMatrix);
 
         const { modelUniformBuffer, modelBindGroup } = this.prepareNode(node);
-        const normalMatrix = mat4.normalFromMat4(mat4.create(), modelMatrix);
         this.device.queue.writeBuffer(modelUniformBuffer, 0, modelMatrix);
         this.device.queue.writeBuffer(modelUniformBuffer, 64, normalMatrix);
         this.renderPass.setBindGroup(1, modelBindGroup);
 
-        for (const model of getModels(node)) {
+        for (const model of node.getComponentsOfType(Model)) {
             this.renderModel(model);
         }
 
