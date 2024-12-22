@@ -1,5 +1,4 @@
-import { mat4 } from 'glm';
-
+import * as glm from '././lib/glm.js';
 import * as WebGPU from '../WebGPU.js';
 
 import { Camera, Model } from '../core.js';
