@@ -1,18 +1,18 @@
-import { ResizeSystem } from './engine/systems/ResizeSystem.js';
-import { UpdateSystem } from './engine/systems/UpdateSystem.js';
+import { ResizeSystem } from 'engine/systems/ResizeSystem.js';
+import { UpdateSystem } from 'engine/systems/UpdateSystem.js';
 
-import { GLTFLoader } from './engine/loaders/GLTFLoader.js';
-import { UnlitRenderer } from './engine/renderers/UnlitRenderer.js';
-import { FirstPersonController } from './engine/controllers/FirstPersonController.js';
+import { GLTFLoader } from 'engine/loaders/GLTFLoader.js';
+import { UnlitRenderer } from 'engine/renderers/UnlitRenderer.js';
+import { FirstPersonController } from 'engine/controllers/FirstPersonController.js';
 
-import { Camera, Model } from './engine/core.js';
+import { Camera, Model } from 'engine/core.js';
 
 import {
     calculateAxisAlignedBoundingBox,
     mergeAxisAlignedBoundingBoxes,
-} from './engine/core/MeshUtils.js';
+} from 'engine/core/MeshUtils.js';
 
-import { Physics } from './game/Physics/Physics.js';
+import { Physics } from './Physics.js';
 
 const canvas = document.querySelector('canvas');
 const renderer = new UnlitRenderer(canvas);
@@ -30,6 +30,16 @@ camera.aabb = {
     max: [0.2, 0.2, 0.2],
 };
 
+loader.loadNode('Box.000').isStatic = true;
+loader.loadNode('Box.001').isStatic = true;
+loader.loadNode('Box.002').isStatic = true;
+loader.loadNode('Box.003').isStatic = true;
+loader.loadNode('Box.004').isStatic = true;
+loader.loadNode('Box.005').isStatic = true;
+loader.loadNode('Wall.000').isStatic = true;
+loader.loadNode('Wall.001').isStatic = true;
+loader.loadNode('Wall.002').isStatic = true;
+loader.loadNode('Wall.003').isStatic = true;
 
 const physics = new Physics(scene);
 scene.traverse(node => {
