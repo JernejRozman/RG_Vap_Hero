@@ -25,6 +25,11 @@ await loader.load(new URL('./scene/scene.gltf', import.meta.url));
 const scene = loader.loadScene(loader.defaultScene);
 const camera = loader.loadNode('Camera');
 
+
+// dodajanje Hose nekje
+const hose_loader = new GLTFLoader;
+//await hose_loader.load(new URL("./models/Powerwasher_Hose/Powerwasher_Hose.gltf", import.meta.url));
+
 // Inicializacija igralca
 const player = new Player(camera, canvas); // Ustvari igralca
 
@@ -32,6 +37,7 @@ const player = new Player(camera, canvas); // Ustvari igralca
 loader.loadNode('Box.000').isStatic = true;
 loader.loadNode('Box.001').isStatic = true;
 loader.loadNode('Wall.000').isStatic = true;
+//hose_loader.loadNode("Nozzle").isStatic = true;
 
 // Inicializacija fizike
 const physics = new Physics(scene);
