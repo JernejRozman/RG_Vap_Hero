@@ -132,7 +132,7 @@ export class UnlitRenderer extends BaseRenderer {
         if (this.gpuObjects.has(material)) {
             return this.gpuObjects.get(material);
         }
-
+        
         const baseTexture = this.prepareTexture(material.baseTexture);
 
         const materialUniformBuffer = this.device.createBuffer({
@@ -219,6 +219,9 @@ export class UnlitRenderer extends BaseRenderer {
 
     renderPrimitive(primitive) {
         const { materialUniformBuffer, materialBindGroup } = this.prepareMaterial(primitive.material);
+        
+        
+        
         this.device.queue.writeBuffer(materialUniformBuffer, 0, new Float32Array(primitive.material.baseFactor));
         this.renderPass.setBindGroup(2, materialBindGroup);
 
