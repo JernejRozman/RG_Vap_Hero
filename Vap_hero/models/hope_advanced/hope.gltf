@@ -13,7 +13,10 @@
 				3,
 				4,
 				5,
-				6
+				6,
+				7,
+				8,
+				9
 			]
 		}
 	],
@@ -22,28 +25,28 @@
 			"mesh":0,
 			"name":"Floor",
 			"scale":[
-				3.423581123352051,
+				3.3809854984283447,
 				6.12985897064209,
-				2.214076519012451
+				2.6862735748291016
 			]
 		},
 		{
 			"mesh":1,
 			"name":"Nozzle",
 			"rotation":[
-				-0.38003939390182495,
+				-0.3800394535064697,
 				0.5529465079307556,
 				-0.5528522729873657,
 				0.49414023756980896
 			],
 			"scale":[
-				0.0686967521905899,
-				0.30262887477874756,
+				0.0686967596411705,
+				0.30262890458106995,
 				0.0686967596411705
 			],
 			"translation":[
-				0.746979832649231,
-				-0.1949671357870102,
+				0.7469797134399414,
+				-0.19496731460094452,
 				-1.2740870714187622
 			]
 		},
@@ -52,7 +55,7 @@
 			"children":[
 				1
 			],
-			"name":"Camera",
+			"name":"Camera.001",
 			"translation":[
 				0.2335624098777771,
 				0.8136788010597229,
@@ -71,10 +74,10 @@
 			"scale":[
 				1.6724928617477417,
 				6.12985897064209,
-				1.156672477722168
+				2.200439453125
 			],
 			"translation":[
-				-15.999105453491211,
+				-17.49431037902832,
 				0,
 				1.3209422826766968
 			]
@@ -91,10 +94,10 @@
 			"scale":[
 				1.6724928617477417,
 				6.12985897064209,
-				1.156672477722168
+				2.588984727859497
 			],
 			"translation":[
-				15.238653182983398,
+				17.808238983154297,
 				0,
 				1.3209422826766968
 			]
@@ -104,14 +107,14 @@
 			"name":"Floor.003",
 			"rotation":[
 				0,
-				0.7071068286895752,
-				0.7071068286895752,
+				-0.7071068286895752,
+				-0.7071068286895752,
 				0
 			],
 			"scale":[
-				2.257608652114868,
-				6.129858493804932,
-				1.1566723585128784
+				2.2576096057891846,
+				6.1298604011535645,
+				1.1566725969314575
 			],
 			"translation":[
 				1.470022201538086,
@@ -124,19 +127,74 @@
 			"name":"Floor.004",
 			"rotation":[
 				0,
-				0.7071068286895752,
-				0.7071068286895752,
+				-0.7071068286895752,
+				-0.7071068286895752,
 				0
 			],
 			"scale":[
-				2.257608652114868,
-				6.129858493804932,
-				1.1566723585128784
+				2.2576096057891846,
+				6.1298604011535645,
+				1.1566725969314575
 			],
 			"translation":[
 				1.470022201538086,
 				0,
-				-11.015913009643555
+				-12.873889923095703
+			]
+		},
+		{
+			"camera":1,
+			"name":"Camera",
+			"rotation":[
+				-0.20997299253940582,
+				0.3857799470424652,
+				0.09062844514846802,
+				0.8937962055206299
+			],
+			"translation":[
+				7.358891487121582,
+				4.958309173583984,
+				6.925790786743164
+			]
+		},
+		{
+			"mesh":6,
+			"name":"Roof.01",
+			"rotation":[
+				0,
+				0.9520237445831299,
+				0.3060241937637329,
+				0
+			],
+			"scale":[
+				2.2576098442077637,
+				6.129859924316406,
+				1.1566728353500366
+			],
+			"translation":[
+				1.470022201538086,
+				11.922006607055664,
+				8.68242073059082
+			]
+		},
+		{
+			"mesh":7,
+			"name":"Roof.02",
+			"rotation":[
+				0,
+				0.952825129032135,
+				-0.303520143032074,
+				0
+			],
+			"scale":[
+				2.2576088905334473,
+				6.129859447479248,
+				1.156672477722168
+			],
+			"translation":[
+				1.470022201538086,
+				11.922006607055664,
+				-9.338685035705566
 			]
 		}
 	],
@@ -146,6 +204,16 @@
 			"perspective":{
 				"aspectRatio":1.7777777777777777,
 				"yfov":1,
+				"zfar":100,
+				"znear":0.10000000149011612
+			},
+			"type":"perspective"
+		},
+		{
+			"name":"Camera",
+			"perspective":{
+				"aspectRatio":1.7777777777777777,
+				"yfov":0.39959652046304894,
 				"zfar":100,
 				"znear":0.10000000149011612
 			},
@@ -199,14 +267,43 @@
 		},
 		{
 			"doubleSided":true,
-			"name":"Floor.003"
+			"name":"Floor.003",
+			"pbrMetallicRoughness":{
+				"baseColorTexture":{
+					"index":4
+				},
+				"metallicFactor":0,
+				"roughnessFactor":0.5
+			}
 		},
 		{
 			"doubleSided":true,
 			"name":"Floor.004",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":4
+					"index":5
+				},
+				"metallicFactor":0,
+				"roughnessFactor":0.5
+			}
+		},
+		{
+			"doubleSided":true,
+			"name":"Floor.005",
+			"pbrMetallicRoughness":{
+				"baseColorTexture":{
+					"index":6
+				},
+				"metallicFactor":0,
+				"roughnessFactor":0.5
+			}
+		},
+		{
+			"doubleSided":true,
+			"name":"Floor.006",
+			"pbrMetallicRoughness":{
+				"baseColorTexture":{
+					"index":7
 				},
 				"metallicFactor":0,
 				"roughnessFactor":0.5
@@ -297,6 +394,34 @@
 					"material":5
 				}
 			]
+		},
+		{
+			"name":"Floor.005",
+			"primitives":[
+				{
+					"attributes":{
+						"POSITION":20,
+						"NORMAL":21,
+						"TEXCOORD_0":22
+					},
+					"indices":3,
+					"material":6
+				}
+			]
+		},
+		{
+			"name":"Floor.006",
+			"primitives":[
+				{
+					"attributes":{
+						"POSITION":23,
+						"NORMAL":24,
+						"TEXCOORD_0":25
+					},
+					"indices":3,
+					"material":7
+				}
+			]
 		}
 	],
 	"textures":[
@@ -305,32 +430,54 @@
 			"source":0
 		},
 		{
-			"sampler":0,
+			"sampler":1,
 			"source":1
 		},
 		{
-			"sampler":0,
-			"source":0
+			"sampler":2,
+			"source":2
 		},
 		{
-			"sampler":0,
-			"source":0
+			"sampler":2,
+			"source":2
 		},
 		{
-			"sampler":0,
-			"source":0
+			"sampler":2,
+			"source":2
+		},
+		{
+			"sampler":2,
+			"source":2
+		},
+		{
+			"sampler":2,
+			"source":3
+		},
+		{
+			"sampler":2,
+			"source":3
 		}
 	],
 	"images":[
 		{
 			"mimeType":"image/jpeg",
-			"name":"Floor",
-			"uri":"Floor.jpg"
+			"name":"concreteTexture",
+			"uri":"concreteTexture.jpg"
 		},
 		{
 			"mimeType":"image/jpeg",
 			"name":"carbonFiber",
 			"uri":"carbonFiber.jpg"
+		},
+		{
+			"mimeType":"image/jpeg",
+			"name":"wallTexture",
+			"uri":"wallTexture.jpg"
+		},
+		{
+			"mimeType":"image/jpeg",
+			"name":"metalRoof",
+			"uri":"metalRoof.jpg"
 		}
 	],
 	"accessors":[
@@ -513,6 +660,62 @@
 			"componentType":5126,
 			"count":4,
 			"type":"VEC2"
+		},
+		{
+			"bufferView":20,
+			"componentType":5126,
+			"count":4,
+			"max":[
+				10,
+				0,
+				10
+			],
+			"min":[
+				-10,
+				0,
+				-10
+			],
+			"type":"VEC3"
+		},
+		{
+			"bufferView":21,
+			"componentType":5126,
+			"count":4,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":22,
+			"componentType":5126,
+			"count":4,
+			"type":"VEC2"
+		},
+		{
+			"bufferView":23,
+			"componentType":5126,
+			"count":4,
+			"max":[
+				10,
+				0,
+				10
+			],
+			"min":[
+				-10,
+				0,
+				-10
+			],
+			"type":"VEC3"
+		},
+		{
+			"bufferView":24,
+			"componentType":5126,
+			"count":4,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":25,
+			"componentType":5126,
+			"count":4,
+			"type":"VEC2"
 		}
 	],
 	"bufferViews":[
@@ -635,17 +838,63 @@
 			"byteLength":32,
 			"byteOffset":94752,
 			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":48,
+			"byteOffset":94784,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":48,
+			"byteOffset":94832,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":32,
+			"byteOffset":94880,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":48,
+			"byteOffset":94912,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":48,
+			"byteOffset":94960,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":32,
+			"byteOffset":95008,
+			"target":34962
 		}
 	],
 	"samplers":[
 		{
+			"magFilter":9729,
+			"minFilter":9987
+		},
+		{
 			"magFilter":9728,
 			"minFilter":9984
+		},
+		{
+			"magFilter":9729,
+			"minFilter":9987,
+			"wrapS":33648,
+			"wrapT":33648
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":94784,
+			"byteLength":95040,
 			"uri":"hope.bin"
 		}
 	]
