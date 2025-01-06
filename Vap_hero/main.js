@@ -34,6 +34,15 @@ camera.aabb = {
     min: [-0.2, -0.2, -0.2],
     max: [0.2, 0.2, 0.2],
 };
+
+
+loader.loadNode('Floor').isStatic = true;
+loader.loadNode('Floor.001').isStatic = true;
+loader.loadNode('Floor.002').isStatic = true;
+loader.loadNode('Floor.003').isStatic = true;
+loader.loadNode('Floor.004').isStatic = true;
+
+
 const physics = new Physics(scene);
 scene.traverse(node => {
     const model = node.getComponentOfType(Model);
