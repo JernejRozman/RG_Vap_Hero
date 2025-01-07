@@ -1,131 +1,154 @@
 import { quat, vec3, mat4 } from 'glm';
-
 import { Transform } from '../core/Transform.js';
 
 export class FirstPersonController {
+  constructor(
+    node,
+    domElement,
+    {
+      pitch = 0,
+      yaw = 0,
+      velocity = [0, 0, 0],
+      acceleration = 50,
+      maxSpeed = 5,
+      decay = 0.99999,
+      pointerSensitivity = 0.002,
+      gravity = -9.81,
+      jumpSpeed = 5,
+    } = {}
+  ) {
+    this.node = node;
+    this.domElement = domElement;
+    this.keys = {};
 
-    constructor(node, domElement, {
-        pitch = 0,
-        yaw = 0,
-        velocity = [0, 0, 0],
-        acceleration = 50,
-        maxSpeed = 5,
-        decay = 0.99999,
-        pointerSensitivity = 0.002,
-    } = {}) {
-        this.node = node;
-        this.domElement = domElement;
+    // Basic camera angles
+    this.pitch = pitch;
+    this.yaw = yaw;
 
-        this.keys = {};
+    // Horizontal movement
+    this.velocity = velocity;
+    this.acceleration = acceleration;
+    this.maxSpeed = maxSpeed;
+    this.decay = decay;
+    this.pointerSensitivity = pointerSensitivity;
 
-        this.pitch = pitch;
-        this.yaw = yaw;
+    // Jumping and gravity
+    this.gravity = gravity;
+    this.jumpSpeed = jumpSpeed;
+    this.verticalVelocity = 0;
+    this.isOnGround = true;
 
-        this.velocity = velocity;
-        this.acceleration = acceleration;
-        this.maxSpeed = maxSpeed;
-        this.decay = decay;
-        this.pointerSensitivity = pointerSensitivity;
+    this.initHandlers();
+  }
 
-        this.initHandlers();
+  initHandlers() {
+    this.pointermoveHandler = this.pointermoveHandler.bind(this);
+    this.keydownHandler = this.keydownHandler.bind(this);
+    this.keyupHandler = this.keyupHandler.bind(this);
+
+    const element = this.domElement;
+    const doc = element.ownerDocument;
+
+    // Keyboard events
+    doc.addEventListener('keydown', this.keydownHandler);
+    doc.addEventListener('keyup', this.keyupHandler);
+
+    // Pointer lock
+    element.addEventListener('click', () => element.requestPointerLock());
+    doc.addEventListener('pointerlockchange', () => {
+      if (doc.pointerLockElement === element) {
+        doc.addEventListener('pointermove', this.pointermoveHandler);
+      } else {
+        doc.removeEventListener('pointermove', this.pointermoveHandler);
+      }
+    });
+  }
+
+  update(t, dt) {
+    // Calculate forward/right unit vectors (on XZ plane)
+    const cos = Math.cos(this.yaw);
+    const sin = Math.sin(this.yaw);
+    const forward = [-sin, 0, -cos];
+    const right = [cos, 0, -sin];
+
+    // Build acceleration vector from keyboard input
+    const acc = vec3.create();
+    if (this.keys['KeyW']) vec3.add(acc, acc, forward);
+    if (this.keys['KeyS']) vec3.sub(acc, acc, forward);
+    if (this.keys['KeyD']) vec3.add(acc, acc, right);
+    if (this.keys['KeyA']) vec3.sub(acc, acc, right);
+
+    // Apply horizontal acceleration
+    vec3.scaleAndAdd(this.velocity, this.velocity, acc, dt * this.acceleration);
+
+    // If no input, apply decay to slow down
+    if (!this.keys['KeyW'] && !this.keys['KeyS'] && !this.keys['KeyD'] && !this.keys['KeyA']) {
+      const decayFactor = Math.exp(dt * Math.log(1 - this.decay));
+      vec3.scale(this.velocity, this.velocity, decayFactor);
     }
 
-    initHandlers() {
-        this.pointermoveHandler = this.pointermoveHandler.bind(this);
-        this.keydownHandler = this.keydownHandler.bind(this);
-        this.keyupHandler = this.keyupHandler.bind(this);
-
-        const element = this.domElement;
-        const doc = element.ownerDocument;
-
-        doc.addEventListener('keydown', this.keydownHandler);
-        doc.addEventListener('keyup', this.keyupHandler);
-
-        element.addEventListener('click', e => element.requestPointerLock());
-        doc.addEventListener('pointerlockchange', e => {
-            if (doc.pointerLockElement === element) {
-                doc.addEventListener('pointermove', this.pointermoveHandler);
-            } else {
-                doc.removeEventListener('pointermove', this.pointermoveHandler);
-            }
-        });
+    // Limit horizontal speed
+    const speed = vec3.length(this.velocity);
+    if (speed > this.maxSpeed) {
+      vec3.scale(this.velocity, this.velocity, this.maxSpeed / speed);
     }
 
-    update(t, dt) {
-        // Calculate forward and right vectors.
-        const cos = Math.cos(this.yaw);
-        const sin = Math.sin(this.yaw);
-        const forward = [-sin, 0, -cos];
-        const right = [cos, 0, -sin];
-
-        // Map user input to the acceleration vector.
-        const acc = vec3.create();
-        if (this.keys['KeyW']) {
-            vec3.add(acc, acc, forward);
-        }
-        if (this.keys['KeyS']) {
-            vec3.sub(acc, acc, forward);
-        }
-        if (this.keys['KeyD']) {
-            vec3.add(acc, acc, right);
-        }
-        if (this.keys['KeyA']) {
-            vec3.sub(acc, acc, right);
-        }
-
-        // Update velocity based on acceleration.
-        vec3.scaleAndAdd(this.velocity, this.velocity, acc, dt * this.acceleration);
-
-        // If there is no user input, apply decay.
-        if (!this.keys['KeyW'] &&
-            !this.keys['KeyS'] &&
-            !this.keys['KeyD'] &&
-            !this.keys['KeyA'])
-        {
-            const decay = Math.exp(dt * Math.log(1 - this.decay));
-            vec3.scale(this.velocity, this.velocity, decay);
-        }
-
-        // Limit speed to prevent accelerating to infinity and beyond.
-        const speed = vec3.length(this.velocity);
-        if (speed > this.maxSpeed) {
-            vec3.scale(this.velocity, this.velocity, this.maxSpeed / speed);
-        }
-
-        const transform = this.node.getComponentOfType(Transform);
-        if (transform) {
-            // Update translation based on velocity.
-            vec3.scaleAndAdd(transform.translation,
-                transform.translation, this.velocity, dt);
-
-            // Update rotation based on the Euler angles.
-            const rotation = quat.create();
-            quat.rotateY(rotation, rotation, this.yaw);
-            quat.rotateX(rotation, rotation, this.pitch);
-            transform.rotation = rotation;
-        }
+    // Gravity for jumping/falling
+    if (!this.isOnGround) {
+      this.verticalVelocity += this.gravity * dt;
     }
 
-    pointermoveHandler(e) {
-        const dx = e.movementX;
-        const dy = e.movementY;
+    // Get transform component to move/rotate our camera or object
+    const transform = this.node.getComponentOfType(Transform);
+    if (transform) {
+      // Horizontal movement
+      vec3.scaleAndAdd(transform.translation, transform.translation, this.velocity, dt);
 
-        this.pitch -= dy * this.pointerSensitivity;
-        this.yaw   -= dx * this.pointerSensitivity;
+      // Vertical movement
+      transform.translation[1] += this.verticalVelocity * dt;
 
-        const twopi = Math.PI * 2;
-        const halfpi = Math.PI / 2;
+    // Instead of transform.translation[1] <= 0, do:
+    const cameraFloorY = 0.8136788010597229;
 
-        this.pitch = Math.min(Math.max(this.pitch, -halfpi), halfpi);
-        this.yaw = ((this.yaw % twopi) + twopi) % twopi;
+    if (transform.translation[1] <= cameraFloorY) {
+    transform.translation[1] = cameraFloorY;
+    this.verticalVelocity = 0;
+    this.isOnGround = true;
     }
 
-    keydownHandler(e) {
-        this.keys[e.code] = true;
-    }
 
-    keyupHandler(e) {
-        this.keys[e.code] = false;
+      // Update rotation from pitch/yaw
+      const rotation = quat.create();
+      quat.rotateY(rotation, rotation, this.yaw);
+      quat.rotateX(rotation, rotation, this.pitch);
+      transform.rotation = rotation;
     }
+  }
 
+  pointermoveHandler(e) {
+    // Mouse look
+    this.pitch -= e.movementY * this.pointerSensitivity;
+    this.yaw -= e.movementX * this.pointerSensitivity;
+
+    // Clamp pitch between -90° and +90°
+    const halfpi = Math.PI / 2;
+    this.pitch = Math.max(-halfpi, Math.min(halfpi, this.pitch));
+
+    // Keep yaw within 0..2π
+    const twopi = 2 * Math.PI;
+    this.yaw = ((this.yaw % twopi) + twopi) % twopi;
+  }
+
+  keydownHandler(e) {
+    this.keys[e.code] = true;
+    // Jump if Space is pressed and we're on ground
+    if (e.code === 'Space' && this.isOnGround) {
+      this.verticalVelocity = this.jumpSpeed;
+      this.isOnGround = false;
+    }
+  }
+
+  keyupHandler(e) {
+    this.keys[e.code] = false;
+  }
 }
