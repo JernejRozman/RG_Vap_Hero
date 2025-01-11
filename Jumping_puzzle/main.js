@@ -34,81 +34,19 @@ camera.aabb = {
 };
 
 
-loader.loadNode('Floor').isStatic = true;
-loader.loadNode('Cube').isStatic = true;
-loader.loadNode('Cube.001').isStatic = true;
-loader.loadNode('Cube.002').isStatic = true;
-loader.loadNode('Cube.003').isStatic = true;
-loader.loadNode('Cube.004').isStatic = true;
-loader.loadNode('Cube.005').isStatic = true;
-loader.loadNode('Cube.006').isStatic = true;
-loader.loadNode('Cube.007').isStatic = true;
-loader.loadNode('Cube.008').isStatic = true;
-loader.loadNode('Cube.009').isStatic = true;
-loader.loadNode('SurfTorus').isStatic = true;
-loader.loadNode('BézierCurve').isStatic = true;
-loader.loadNode('Plane').isStatic = true;
-loader.loadNode('Cube.010').isStatic = true;
-loader.loadNode('Cube.011').isStatic = true;
-loader.loadNode('Cube.012').isStatic = true;
-loader.loadNode('Cube.013').isStatic = true;
-loader.loadNode('Cube.014').isStatic = true;
-loader.loadNode('Cube.015').isStatic = true;
-loader.loadNode('Torus').isStatic = true;
-loader.loadNode('BézierCircle').isStatic = true;
-loader.loadNode('BézierCircle.001').isStatic = true;
-loader.loadNode('BézierCircle.002').isStatic = true;
-loader.loadNode('BézierCircle.003').isStatic = true;
-loader.loadNode('Sphere').isStatic = true;
-loader.loadNode('Cube.016').isStatic = true;
-loader.loadNode('Plane.001').isStatic = true;
-loader.loadNode('Sphere.001').isStatic = true;
-loader.loadNode('Sphere.002').isStatic = true;
-loader.loadNode('Sphere.003').isStatic = true;
-loader.loadNode('Sphere.004').isStatic = true;
-loader.loadNode('Cylinder').isStatic = true;
-loader.loadNode('Cylinder.002').isStatic = true;
-loader.loadNode('Cylinder.001').isStatic = true;
-loader.loadNode('Cube.017').isStatic = true;
-loader.loadNode('Cube.018').isStatic = true;
-loader.loadNode('Cone').isStatic = true;
-loader.loadNode('Cube.019').isStatic = true;
-loader.loadNode('Cube.020').isStatic = true;
-loader.loadNode('Cube.021').isStatic = true;
-loader.loadNode('Cube.022').isStatic = true;
-loader.loadNode('Cube.023').isStatic = true;
-loader.loadNode('Cube.024').isStatic = true;
-loader.loadNode('Cube.025').isStatic = true;
-loader.loadNode('Cube.026').isStatic = true;
-loader.loadNode('Plane.002').isStatic = true;
-loader.loadNode('Plane.003').isStatic = true;
-loader.loadNode('Plane.004').isStatic = true;
-loader.loadNode('Plane.005').isStatic = true;
-loader.loadNode('Plane.006').isStatic = true;
-loader.loadNode('Cube.027').isStatic = true;
-loader.loadNode('Cube.028').isStatic = true;
-loader.loadNode('Cube.029').isStatic = true;
-loader.loadNode('Cube.030').isStatic = true;
-loader.loadNode('Cube.031').isStatic = true;
-loader.loadNode('Cube.032').isStatic = true;
-loader.loadNode('Cube.033').isStatic = true;
-loader.loadNode('Cube.034').isStatic = true;
-loader.loadNode('BézierCurve.001').isStatic = true;
-loader.loadNode('SurfTorus.002').isStatic = true;
-loader.loadNode('Sphere.005').isStatic = true;
-loader.loadNode('Plane.010').isStatic = true;
-loader.loadNode('Plane.011').isStatic = true;
-loader.loadNode('Plane.012').isStatic = true;
-loader.loadNode('Sphere.006').isStatic = true;
-loader.loadNode('Plane.007').isStatic = true;
-loader.loadNode('Plane.008').isStatic = true;
-loader.loadNode('Sphere.007').isStatic = true;
-loader.loadNode('Plane.009').isStatic = true;
-loader.loadNode('Plane.013').isStatic = true;
-loader.loadNode('Cube.035').isStatic = true;
-loader.loadNode('Text').isStatic = true;
-loader.loadNode('Sphere.008').isStatic = true;
-loader.loadNode('Sphere.009').isStatic = true;
+const staticNodes = [
+    'Floor', 'Cube', 'Cube.001', 'Cube.002', 'Cube.003', 'Cube.004', 'Cube.005', 'Cube.006', 'Cube.007', 'Cube.008', 'Cube.009', 'SurfTorus', 'BézierCurve',
+    'Plane', 'Cube.010', 'Cube.011', 'Cube.012', 'Cube.013', 'Cube.014', 'Cube.015', 'Torus', 'BézierCircle', 'BézierCircle.001', 'BézierCircle.002', 'BézierCircle.003',
+    'Sphere', 'Cube.016', 'Plane.001', 'Sphere.001', 'Sphere.002', 'Sphere.003', 'Sphere.004', 'Cylinder', 'Cylinder.002', 'Cylinder.001', 'Cube.017', 'Cube.018',
+    'Cone', 'Cube.019', 'Cube.020', 'Cube.021', 'Cube.022', 'Cube.023', 'Cube.024', 'Cube.025', 'Cube.026', 'Plane.002', 'Plane.003', 'Plane.004', 'Plane.005',
+    'Plane.006', 'Cube.027', 'Cube.028', 'Cube.029', 'Cube.030', 'Cube.031', 'Cube.032', 'Cube.033', 'Cube.034', 'BézierCurve.001', 'SurfTorus.002', 'Sphere.005', 'Plane.010',
+    'Plane.011', 'Plane.012', 'Sphere.006', 'Plane.007', 'Plane.008', 'Sphere.007', 'Plane.009', 'Plane.013', 'Cube.035', 'Text', 'Sphere.008', 'Sphere.009'
+];
+
+for (const nodeName of staticNodes) {
+    const node = loader.loadNode(nodeName);
+    node.isStatic = true;
+}
 
 
 const physics = new Physics(scene);
