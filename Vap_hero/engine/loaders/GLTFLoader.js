@@ -191,6 +191,41 @@ export class GLTFLoader {
         return texture;
     }
 
+    loadTwoTextures(nameOrIndex_One, nameOrIndex_Two) {
+        const gltfSpecOne = this.findByNameOrIndex(this.gltf.textures, nameOrIndex_One);
+        const gltfSpecTwo = this.findByNameOrIndex(this.gltf.textures, nameOrIndex_Two);
+    
+        if (!gltfSpecOne || !gltfSpecTwo) {
+            console.warn("One or both textures not found");
+            return null;
+        }
+    
+        const loadTextureOptions = (gltfSpec) => {
+            const options = {};
+            if (gltfSpec.source !== undefined) {
+                options.image = this.loadImage(gltfSpec.source);
+            }
+            if (gltfSpec.sampler !== undefined) {
+                options.sampler = this.loadSampler(gltfSpec.sampler);
+            } else {
+                options.sampler = new Sampler();
+            }
+            return options;
+        };
+    
+        const textureOneOptions = loadTextureOptions(gltfSpecOne);
+        const textureTwoOptions = loadTextureOptions(gltfSpecTwo);
+    
+        const textureOne = new Texture(textureOneOptions);
+        const textureTwo = new Texture(textureTwoOptions);
+    
+        this.cache.set(gltfSpecOne, textureOne);
+        this.cache.set(gltfSpecTwo, textureTwo);
+    
+        return { textureOne, textureTwo };
+    }
+    
+
     loadMaterial(nameOrIndex) {
         const gltfSpec = this.findByNameOrIndex(this.gltf.materials, nameOrIndex);
         if (!gltfSpec) {

@@ -21,14 +21,14 @@ const renderer = new UnlitRenderer(canvas);
 await renderer.initialize();
 
 const loader = new GLTFLoader();
-await loader.load(new URL('./models/hope_advanced/hope.gltf', import.meta.url));
+await loader.load(new URL('./models/course/game.gltf', import.meta.url));
 
 const scene = loader.loadScene(loader.defaultScene);
 const camera = loader.loadNode('Camera');
-const hose = loader.loadNode("Nozzle");
+
 
 camera.addComponent(new FirstPersonController(camera, canvas));
-camera.addComponent(hose)
+
 camera.isDynamic = true;
 camera.aabb = {
     min: [-0.2, -0.2, -0.2],
@@ -36,15 +36,7 @@ camera.aabb = {
 };
 
 
-loader.loadNode('Floor').isStatic = true;
-loader.loadNode('Floor.001').isStatic = true;
-loader.loadNode('Floor.002').isStatic = true;
-loader.loadNode('Floor.003').isStatic = true;
-loader.loadNode('Floor.004').isStatic = true;
-loader.loadNode('Cube').isStatic = true;
-loader.loadNode('Plane').isStatic = true;
-loader.loadNode('Sphere').isStatic = true;
-loader.loadNode('Nozzle').isStatic = true;
+
 
 
 const physics = new Physics(scene);
