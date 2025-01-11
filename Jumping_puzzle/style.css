@@ -1,12 +1,11 @@
+/* General Reset */
 body, html {
     margin: 0;
     padding: 0;
-}
-
-* {
     font-family: sans-serif;
 }
 
+/* Fullscreen Game Interface */
 .fullscreen {
     width: 100vw;
     height: 100vh;
@@ -18,39 +17,212 @@ body, html {
     height: 100%;
 }
 
-.overlay {
-    position: fixed;
-    left: 0;
-    top: 0;
-}
-
-.no-touch {
-    touch-action: none;
-}
-
-.pixelated {
-    image-rendering: pixelated;
-}
-
-.loader-container {
+/* Dynamic Background with Clouds */
+.loading-menu {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(to bottom, #87ceeb, #4ec0ca);
+    overflow: hidden;
+    color: white;
+    text-align: center;
+    transition: opacity 1.5s ease-in-out;
+    z-index: 2;
 }
 
-.loader {
-    width: 100px;
-    height: 100px;
-
-    border: 15px solid transparent;
+/* Cloud Styles */
+.cloud {
+    position: absolute;
+    background: white;
     border-radius: 50%;
-    border-top-color: #999;
-    border-bottom-color: #999;
-
-    animation: spin 2s ease-in-out infinite;
+    filter: blur(15px);
+    opacity: 0.8;
+    z-index: 0; /* Ensure clouds are behind all elements */
+    animation: moveClouds linear infinite;
 }
 
-@keyframes spin {
-      0% { transform: rotate(0deg); }
-    100% { transform: rotate(1800deg); }
+.cloud.size-1 {
+    width: 100px;
+    height: 50px;
+    animation-duration: 12s;
+}
+
+.cloud.size-2 {
+    width: 150px;
+    height: 75px;
+    animation-duration: 16s;
+}
+
+.cloud.size-3 {
+    width: 200px;
+    height: 100px;
+    animation-duration: 20s;
+}
+
+.cloud.size-4 {
+    width: 250px;
+    height: 125px;
+    animation-duration: 24s;
+}
+
+.cloud.size-5 {
+    width: 300px;
+    height: 150px;
+    animation-duration: 38s;
+}
+
+@keyframes moveClouds {
+    from {
+        transform: translateX(-1%);
+    }
+    to {
+        transform: translateX(120vw);
+    }
+}
+
+/* Title Styling */
+.title {
+    position: absolute;
+    top: 1%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    font-size: 8rem;
+    font-family: 'Poppins', sans-serif;
+    color: #ffcc00;
+    text-shadow: 3px 3px 7px rgba(0, 0, 0, 0.9);
+    animation: fadeIn 2s ease;
+    z-index: 10;
+}
+
+/* Slogan Styling */
+.tagline {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    font-size: 3rem;
+    font-family: 'Poppins', sans-serif;
+    color: #ffcc00;
+    text-shadow: 3px 3px 7px rgba(0, 0, 0, 0.9);
+    font-weight: 500;
+    animation: fadeIn 2s ease;
+    z-index: 10;
+}
+
+/* Info Box */
+.info-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 50%;
+    height: 40%;
+    background: #f0c896;
+    border: 5px solid #6f370f;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+    z-index: 2;
+}
+
+.info-section {
+    flex: 1;
+    text-align: center;
+    /*lift the text a bit*/
+    margin-top: -100px;
+    font-family: 'Poppins', sans-serif;
+    color: rgb(0, 0, 0);
+    font-size: 2rem;
+    font-weight: 1000;
+}
+
+.icon.asdw span {
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    line-height: 60px;
+    background: #fff;
+    color: #000;
+    font-size: 1.5rem;
+    text-align: center;
+    border-radius: 5px;
+    font-family: monospace;
+}
+
+.icon.mouse {
+    font-size: 4rem;
+    margin-top: -10px;
+    color: white;
+    /*moce down the icon a bit*/
+    margin-bottom: -20px;
+}
+
+.icon.space {
+    font-size: 4rem;
+    margin-top: -35px;
+    color: white;
+}
+
+/* Next Button */
+.next-button {
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 30px;
+    font-size: 3rem;
+    color: #fff;
+    background: #ff0000;
+    border: 5px solid #740707;
+    border-radius: 10px;
+    cursor: pointer;
+    z-index: 11;
+}
+
+.next-button:hover {
+    background: #740707;
+}
+
+/* Play Button */
+.play-button {
+    padding: 1.5rem 4rem;
+    font-size: 3rem;
+    /*make bold*/
+    font-weight: 700;
+    color: #fff;
+    background: #ff0000;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    animation: pulse 2s infinite, colorChange 5s infinite;
+    opacity: 0; /* Initially hidden */
+    transition: opacity 1.5s ease-in-out; /* Smooth appearance */
+    z-index: 10;
+}
+
+.play-button:hover {
+    background: #740707;
+}
+
+/* Keyframes for Play Button */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+@keyframes colorChange {
+    0% { background: #b30f0f; }
+    50% { background: #13bc13; }
+    100% { background: #b30f0f; }
 }

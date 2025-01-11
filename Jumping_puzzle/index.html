@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Jumping Puzzle</title>
+    <title>Climb to Win</title>
     <script type="importmap">
         {
           "imports": {
@@ -11,15 +11,48 @@
             "glm": "./lib/glm.js"
           }
         }
-        </script>
-        
     </script>
     <script type="module" src="main.js"></script>
+    <!-- Include the new font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="fullscreen no-touch pixelated">
+    <!-- Loading Menu -->
+    <div id="loading-menu" class="loading-menu">
+        <h1 class="title">CLIMB TO WIN</h1>
+        <p class="tagline">The ultimate race to the top!</p>
+
+        <!-- Brown Box with Instructions -->
+        <div id="info-box" class="info-box">
+            <div class="info-section">
+                <p>Move:</p>
+                <div class="icon asdw">
+                    <span>A</span><span>S</span><span>D</span><span>W</span>
+                </div>
+            </div>
+            <div class="info-section">
+                <p>Change View:</p>
+                <div class="icon mouse">🖱️</div>
+            </div>
+            <div class="info-section">
+                <p>Jump:</p>
+                <div class="icon space">⎵</div>
+            </div>
+
+            <!-- Next Button -->
+            <button id="next-button" class="next-button">Next</button>
+        </div>
+
+        <!-- Play Button -->
+        <button id="play-button" class="play-button" style="opacity: 0;">Play</button>
+    </div>
+    
+    <!-- Game Interface -->
+    <div id="game-interface" class="fullscreen no-touch pixelated">
         <canvas></canvas>
     </div>
+
+    <script src="menu.js"></script>
 </body>
 </html>
