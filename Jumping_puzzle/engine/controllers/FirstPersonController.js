@@ -9,8 +9,8 @@ export class FirstPersonController {
       pitch = 0,
       yaw = 0,
       velocity = [0, 0, 0],
-      acceleration = 50,
-      maxSpeed = 5,
+      acceleration = 150,
+      maxSpeed = 7,
       decay = 0.99999,
       pointerSensitivity = 0.002,
       gravity = -9.81,
@@ -108,7 +108,7 @@ export class FirstPersonController {
       transform.translation[1] += this.verticalVelocity * dt;
 
     // Instead of transform.translation[1] <= 0, do:
-    const cameraFloorY = 0.8136788010597229;
+    const cameraFloorY = 8.974434852600098;
 
     if (transform.translation[1] <= cameraFloorY) {
     transform.translation[1] = cameraFloorY;
