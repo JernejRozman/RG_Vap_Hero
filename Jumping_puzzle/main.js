@@ -12,7 +12,6 @@ import { Player } from './game/Player.js';
 import { AudioController } from 'engine/controllers/AudioController.js';
 const audioController = new AudioController('./audio/test.mp3');
 
-
 import {
     calculateAxisAlignedBoundingBox,
     mergeAxisAlignedBoundingBoxes,
@@ -25,7 +24,7 @@ const renderer = new UnlitRenderer(canvas);
 await renderer.initialize();
 
 const loader = new GLTFLoader();
-await loader.load(new URL('./models/game/game.gltf', import.meta.url));
+await loader.load(new URL('./models/game/game3.gltf', import.meta.url));
 
 const scene = loader.loadScene(loader.defaultScene);
 const camera = loader.loadNode('Camera');
@@ -50,14 +49,45 @@ light.addComponent(new Light({
     faktor_usmerjenosti: 20,
 }));
 
-
-
 camera.addComponent(new FirstPersonController(camera, canvas));
 camera.isDynamic = true;
 camera.aabb = {
     min: [-0.5, -0.5, -0.5],
     max: [0.5, 0.5, 0.5],
 };
+
+function goToMainScreen() {
+    const cameraTransform = camera.getComponentOfType(Transform);
+    if (cameraTransform) {
+        // Update camera position
+        cameraTransform.translation[1] = 50; // Set y coordinate
+        cameraTransform.translation[2] = 49; // Set z coordinate
+    }
+
+    console.log("Navigating to the main menu...");
+
+    // Transition from game to the menu
+    const menu = document.getElementById('loading-menu');
+    const gameInterface = document.getElementById('game-interface');
+
+    // Fade out game interface
+    gameInterface.style.transition = 'opacity 1.5s ease-in-out';
+    gameInterface.style.opacity = '0';
+
+    // Fade in menu after the game interface fades out
+    setTimeout(() => {
+        gameInterface.style.display = 'none'; // Hide game interface
+        menu.style.display = 'block'; // Show menu
+        menu.style.opacity = '1'; // Make it fully visible
+    }, 1500);
+}
+
+// Trigger with key press
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'm') {
+        goToMainScreen();
+    }
+});
 
 // Extract all node names except for cameras and lights
 const staticNodes = loader.gltf.nodes
@@ -125,6 +155,14 @@ function update(time, dt) {
     if (cameraTransform) {
         const { translation } = cameraTransform;
         positionDisplay.textContent = `Camera position: x=${translation[0].toFixed(2)}, y=${translation[1].toFixed(2)}, z=${translation[2].toFixed(2)}`;
+
+        // ⇩⇩ New condition to trigger goToMainScreen ⇩⇩
+        if (
+            translation[1] >= 50 && translation[1] <= 53 &&
+            translation[2] >= 49.5 && translation[2] <= 53
+        ) {
+            goToMainScreen();
+        }
     }
 
     physics.update(time, dt);

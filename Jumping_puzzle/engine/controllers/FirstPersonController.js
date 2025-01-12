@@ -13,7 +13,7 @@ export class FirstPersonController {
       maxSpeed = 7,
       decay = 0.99999,
       pointerSensitivity = 0.002,
-      gravity = -9.81,
+      gravity = -6.81,
       jumpSpeed = 5,
     } = {}
   ) {
