@@ -15,7 +15,7 @@ export class Camera {
         this.fovy = fovy;
         this.halfy = halfy;
         this.near = near;
-        this.far = far*2;
+        this.far = far*5;
     }
 
     get projectionMatrix() {
