@@ -1,7 +1,6 @@
-// Player.js
 import { FirstPersonController } from 'engine/controllers/FirstPersonController.js';
 import { Camera } from 'engine/core.js';
-
+import { Physics } from './Physics.js';
 
 export class Player {
     constructor(camera, canvas, scene) {
@@ -15,8 +14,11 @@ export class Player {
             min: [-0.2, -0.2, -0.2],
             max: [0.2, 0.2, 0.2],
         };
+
+        this.physics = new Physics(scene);
     }
 
     update(time, dt) {
+        this.physics.update(time, dt);
     }
 }

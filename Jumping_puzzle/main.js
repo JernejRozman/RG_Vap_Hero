@@ -8,7 +8,6 @@ import { FirstPersonController } from 'engine/controllers/FirstPersonController.
 import { Camera, Model } from 'engine/core.js';
 import { Player } from './game/Player.js';
 
-
 import {
     calculateAxisAlignedBoundingBox,
     mergeAxisAlignedBoundingBoxes,
@@ -33,21 +32,16 @@ camera.aabb = {
     max: [0.5, 0.5, 0.5],
 };
 
+// Extract all node names except for cameras and lights
+const staticNodes = loader.gltf.nodes
+    .filter(node => !node.camera && !node.light)
+    .map(node => node.name);
 
-const staticNodes = [
-    'Floor', 'Cube', 'Cube.001', 'Cube.002', 'Cube.003', 'Cube.004', 'Cube.005', 'Cube.006', 'Cube.007', 'Cube.008', 'Cube.009', 'SurfTorus', 'BézierCurve',
-    'Plane', 'Cube.010', 'Cube.011', 'Cube.012', 'Cube.013', 'Cube.014', 'Cube.015', 'Torus', 'BézierCircle', 'BézierCircle.001', 'BézierCircle.002', 'BézierCircle.003',
-    'Sphere', 'Cube.016', 'Plane.001', 'Sphere.001', 'Sphere.002', 'Sphere.003', 'Sphere.004', 'Cylinder', 'Cylinder.002', 'Cylinder.001', 'Cube.017', 'Cube.018',
-    'Cone', 'Cube.019', 'Cube.020', 'Cube.021', 'Cube.022', 'Cube.023', 'Cube.024', 'Cube.025', 'Cube.026', 'Plane.002', 'Plane.003', 'Plane.004', 'Plane.005',
-    'Plane.006', 'Cube.027', 'Cube.028', 'Cube.029', 'Cube.030', 'Cube.031', 'Cube.032', 'Cube.033', 'Cube.034', 'BézierCurve.001', 'SurfTorus.002', 'Sphere.005', 'Plane.010',
-    'Plane.011', 'Plane.012', 'Sphere.006', 'Plane.007', 'Plane.008', 'Sphere.007', 'Plane.009', 'Plane.013', 'Cube.035', 'Text', 'Sphere.008', 'Sphere.009'
-];
-
+// Load and set static property for each node
 for (const nodeName of staticNodes) {
     const node = loader.loadNode(nodeName);
     node.isStatic = true;
 }
-
 
 const physics = new Physics(scene);
 scene.traverse(node => {

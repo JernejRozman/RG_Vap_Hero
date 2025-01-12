@@ -15,6 +15,7 @@ export class FirstPersonController {
       pointerSensitivity = 0.002,
       gravity = -9.81,
       jumpSpeed = 5,
+
     } = {}
   ) {
     this.node = node;
@@ -142,8 +143,8 @@ export class FirstPersonController {
   keydownHandler(e) {
     this.keys[e.code] = true;
     // Jump if Space is pressed and we're on ground
-    if (e.code === 'Space' && this.isOnGround) {
-      this.verticalVelocity = this.jumpSpeed;
+    if (e.code === 'Space' ) {
+      this.verticalVelocity = this.jumpSpeed+10;
       this.isOnGround = false;
     }
   }
