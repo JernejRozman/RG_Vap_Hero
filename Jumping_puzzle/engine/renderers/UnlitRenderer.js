@@ -1,18 +1,23 @@
-import { mat4 } from 'glm';
+import { mat4, vec3 } from 'glm';
+
 import * as WebGPU from '../WebGPU.js';
 
-import { Camera, Model } from '../core.js';
+import { Camera, Model, Light } from '../core.js';
 
 import {
     getLocalModelMatrix,
     getGlobalViewMatrix,
     getProjectionMatrix,
+
+    // Dodano
+    getGlobalModelMatrix,
+
 } from '../core/SceneUtils.js';
 
 import { BaseRenderer } from './BaseRenderer.js';
 
 const vertexBufferLayout = {
-    arrayStride: 20,
+    arrayStride: 32,
     attributes: [
         {
             name: 'position',
@@ -25,6 +30,12 @@ const vertexBufferLayout = {
             shaderLocation: 1,
             offset: 12,
             format: 'float32x2',
+        },
+        {
+            name: 'normal',
+            shaderLocation: 2,
+            offset: 20,
+            format: 'float32x3',
         },
     ],
 };
@@ -94,25 +105,34 @@ export class UnlitRenderer extends BaseRenderer {
     }
 
     prepareCamera(camera) {
-        if (this.gpuObjects.has(camera)) {
-            return this.gpuObjects.get(camera);
-        }
-
+        if (this.gpuObjects.has(camera)) return this.gpuObjects.get(camera);
+    
         const cameraUniformBuffer = this.device.createBuffer({
-            size: 128,
+            size: 144, // 2 * 64 (matrices) + 16 (position + padding)
             usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
         });
-
+    
         const cameraBindGroup = this.device.createBindGroup({
             layout: this.pipeline.getBindGroupLayout(0),
             entries: [
                 { binding: 0, resource: { buffer: cameraUniformBuffer } },
             ],
         });
-
+    
         const gpuObjects = { cameraUniformBuffer, cameraBindGroup };
         this.gpuObjects.set(camera, gpuObjects);
         return gpuObjects;
+    }
+
+    updateCamera(camera) {
+        const { cameraUniformBuffer } = this.prepareCamera(camera);
+        const viewMatrix = getGlobalViewMatrix(camera);
+        const projectionMatrix = getProjectionMatrix(camera);
+        const position = camera.getComponentOfType(Transform).translation;
+    
+        this.device.queue.writeBuffer(cameraUniformBuffer, 0, new Float32Array(viewMatrix));
+        this.device.queue.writeBuffer(cameraUniformBuffer, 64, new Float32Array(projectionMatrix));
+        this.device.queue.writeBuffer(cameraUniformBuffer, 128, new Float32Array([...position, 0])); // Add position
     }
 
     prepareTexture(texture) {
@@ -132,7 +152,7 @@ export class UnlitRenderer extends BaseRenderer {
         if (this.gpuObjects.has(material)) {
             return this.gpuObjects.get(material);
         }
-        
+
         const baseTexture = this.prepareTexture(material.baseTexture);
 
         const materialUniformBuffer = this.device.createBuffer({
@@ -153,6 +173,56 @@ export class UnlitRenderer extends BaseRenderer {
         this.gpuObjects.set(material, gpuObjects);
         return gpuObjects;
     }
+    /*
+    ###########################################################################################
+    ###########################################################################################
+    ########################### DELO S SVETLOBO ########################  START   #############
+    ###########################################################################################
+    ###########################################################################################
+    */
+    prepareLight(light) {
+        if (this.gpuObjects.has(light)) return this.gpuObjects.get(light);
+    
+        const lightUniformBuffer = this.device.createBuffer({
+            size: 80,
+            usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+        });
+    
+        const lightBindGroup = this.device.createBindGroup({
+            layout: this.pipeline.getBindGroupLayout(3),
+            entries: [
+                { binding: 0, resource: { buffer: lightUniformBuffer } },
+            ],
+        });
+    
+        const gpuObjects = { lightUniformBuffer, lightBindGroup };
+        this.gpuObjects.set(light, gpuObjects);
+        return gpuObjects;
+    }
+    
+    updateLight(light) {
+        const { lightUniformBuffer } = this.prepareLight(light);
+        this.device.queue.writeBuffer(lightUniformBuffer, 0, new Float32Array([
+            ...light.position, 0,
+            ...light.color, 0,
+            ...light.ambient, 0,
+            ...light.smer_luci, 0,
+            light.sirina_svetlobnega_snopa,
+            light.faktor_usmerjenosti,
+        ]));
+    }
+    
+
+
+        /*
+    ###########################################################################################
+    ###########################################################################################
+    ########################### DELO S SVETLOBO #######################  END    ###############
+    ###########################################################################################
+    ###########################################################################################
+    */
+
+
 
     render(scene, camera) {
         if (this.depthTexture.width !== this.canvas.width || this.depthTexture.height !== this.canvas.height) {
@@ -185,6 +255,35 @@ export class UnlitRenderer extends BaseRenderer {
         this.device.queue.writeBuffer(cameraUniformBuffer, 0, viewMatrix);
         this.device.queue.writeBuffer(cameraUniformBuffer, 64, projectionMatrix);
         this.renderPass.setBindGroup(0, cameraBindGroup);
+
+        /*
+    ###########################################################################################
+    ###########################################################################################
+    ########################### DELO S SVETLOBO #####################   START   ###############
+    ###########################################################################################
+    ###########################################################################################
+    */
+        const light = scene.find(node => node.getComponentOfType(Light));
+        const lightComponent = light.getComponentOfType(Light);
+        const lightPosition = mat4.getTranslation(vec3.create(), getGlobalModelMatrix(light));
+        const { lightUniformBuffer, lightBindGroup } = this.prepareLight(lightComponent);
+        this.device.queue.writeBuffer(lightUniformBuffer, 0, new Float32Array([
+            ...lightPosition, 0, 
+            ...lightComponent.color, 0,
+            ...lightComponent.ambient, 0,
+            ...lightComponent.smer_luci, 0,
+            lightComponent.sirina_svetlobnega_snopa,
+            lightComponent.faktor_usmerjenosti,
+        ]));
+        this.renderPass.setBindGroup(3, lightBindGroup);
+
+        /*
+    ###########################################################################################
+    ###########################################################################################
+    ########################### DELO S SVETLOBO ###############   END  ########################
+    ###########################################################################################
+    ###########################################################################################
+    */
 
         this.renderNode(scene);
 
@@ -219,9 +318,6 @@ export class UnlitRenderer extends BaseRenderer {
 
     renderPrimitive(primitive) {
         const { materialUniformBuffer, materialBindGroup } = this.prepareMaterial(primitive.material);
-        
-        
-        
         this.device.queue.writeBuffer(materialUniformBuffer, 0, new Float32Array(primitive.material.baseFactor));
         this.renderPass.setBindGroup(2, materialBindGroup);
 

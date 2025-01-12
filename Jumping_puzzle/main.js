@@ -3,9 +3,10 @@ import { UpdateSystem } from 'engine/systems/UpdateSystem.js';
 
 import { GLTFLoader } from 'engine/loaders/GLTFLoader.js';
 import { UnlitRenderer } from 'engine/renderers/UnlitRenderer.js';
+
 import { FirstPersonController } from 'engine/controllers/FirstPersonController.js';
 
-import { Camera, Model, Transform } from 'engine/core.js';
+import { Camera, Model, Transform, Light, Node } from 'engine/core.js';
 import { Player } from './game/Player.js';
 
 import {
@@ -25,6 +26,28 @@ await loader.load(new URL('./models/game/game.gltf', import.meta.url));
 const scene = loader.loadScene(loader.defaultScene);
 const camera = loader.loadNode('Camera');
 
+// Luč
+const light = new Node();
+scene.addChild(light);
+light.addComponent(new Transform({
+    // Pozicija luči
+    translation: [0, 200, -100],
+}));
+light.addComponent(new Light({
+    // Barva svetlobe - rahlo rumenkasta za simulacijo sončne svetlobe
+    color: [1, 0.95, 0.8],
+    // Ambientna svetloba - rahlo povečana za bolj naravno osvetlitev
+    ambient: [0.4, 0.4, 0.4],
+    // Smer svetlobe - usmerjena rahlo navzdol in naprej
+    smer_luci: [0, -1, -0.5],
+    // Širina svetlobnega snopa - nekoliko širša za bolj enakomerno osvetlitev
+    sirina_svetlobnega_snopa: Math.cos(Math.PI / 4),
+    // Faktor usmerjenosti svetlobe - zmanjšan za bolj razpršeno svetlobo
+    faktor_usmerjenosti: 30,
+}));
+
+
+
 camera.addComponent(new FirstPersonController(camera, canvas));
 camera.isDynamic = true;
 camera.aabb = {
@@ -34,7 +57,6 @@ camera.aabb = {
 
 // Extract all node names except for cameras and lights
 const staticNodes = loader.gltf.nodes
-    .filter(node => !node.camera && !node.extensions)
     .map(node => node.name);
 
 // Load and set static property for each node

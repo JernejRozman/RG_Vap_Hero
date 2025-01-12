@@ -10,3 +10,4 @@ export * from './core/Texture.js';
 export * from './core/Transform.js';
 export * from './core/Vertex.js';
 export * from './controllers/FirstPersonController.js';
+export * from './core/Light.js'; 
