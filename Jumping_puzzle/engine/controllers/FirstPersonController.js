@@ -108,7 +108,7 @@ export class FirstPersonController {
       transform.translation[1] += this.verticalVelocity * dt;
 
       // Instead of transform.translation[1] <= 0, do:
-      const cameraFloorY = 8.974434852600098;
+      const cameraFloorY = 0;
 
       if (transform.translation[1] <= cameraFloorY) {
         transform.translation[1] = cameraFloorY;

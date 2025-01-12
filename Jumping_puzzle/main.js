@@ -5,7 +5,7 @@ import { GLTFLoader } from 'engine/loaders/GLTFLoader.js';
 import { UnlitRenderer } from 'engine/renderers/UnlitRenderer.js';
 import { FirstPersonController } from 'engine/controllers/FirstPersonController.js';
 
-import { Camera, Model } from 'engine/core.js';
+import { Camera, Model, Transform } from 'engine/core.js';
 import { Player } from './game/Player.js';
 
 import {
@@ -54,12 +54,52 @@ scene.traverse(node => {
     node.aabb = mergeAxisAlignedBoundingBoxes(boxes);
 });
 
+// Create an HTML element to display the camera position
+const positionDisplay = document.createElement('div');
+positionDisplay.style.position = 'absolute';
+positionDisplay.style.top = '10px';
+positionDisplay.style.left = '10px';
+positionDisplay.style.color = 'white';
+positionDisplay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+positionDisplay.style.padding = '5px';
+document.body.appendChild(positionDisplay);
+
+// Create an HTML element to display the timer
+const timerDisplay = document.createElement('div');
+timerDisplay.style.position = 'absolute';
+timerDisplay.style.top = '10px';
+timerDisplay.style.right = '10px';
+timerDisplay.style.color = 'white';
+timerDisplay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+timerDisplay.style.padding = '5px';
+document.body.appendChild(timerDisplay);
+
+let startTime = null;
+
 function update(time, dt) {
+    if (startTime === null) {
+        startTime = time;
+    }
+
+    const elapsedTime = (time - startTime) / 1000;
+    const minutes = Math.floor(elapsedTime / 60);
+    const seconds = Math.floor(elapsedTime % 60);
+    const milliseconds = Math.floor((elapsedTime % 1) * 1000);
+
+    timerDisplay.textContent = `Time: ${milliseconds}s`;
+
     scene.traverse(node => {
         for (const component of node.components) {
             component.update?.(time, dt);
         }
     });
+
+    // Update the camera position display
+    const cameraTransform = camera.getComponentOfType(Transform);
+    if (cameraTransform) {
+        const { translation } = cameraTransform;
+        positionDisplay.textContent = `Camera position: x=${translation[0].toFixed(2)}, y=${translation[1].toFixed(2)}, z=${translation[2].toFixed(2)}`;
+    }
 
     physics.update(time, dt);
 }
