@@ -35,7 +35,7 @@ const light = new Node();
 scene.addChild(light);
 light.addComponent(new Transform({
     // Pozicija luči
-    translation: [0, 200, -100],
+    translation: [0, 200, 0],
 }));
 light.addComponent(new Light({
     // Barva svetlobe - rahlo rumenkasta za simulacijo sončne svetlobe
@@ -43,11 +43,11 @@ light.addComponent(new Light({
     // Ambientna svetloba - rahlo povečana za bolj naravno osvetlitev
     ambient: [0.4, 0.4, 0.4],
     // Smer svetlobe - usmerjena rahlo navzdol in naprej
-    smer_luci: [0, -1, -0.5],
+    smer_luci: [0, -1, 0],
     // Širina svetlobnega snopa - nekoliko širša za bolj enakomerno osvetlitev
-    sirina_svetlobnega_snopa: Math.cos(Math.PI / 4),
+    sirina_svetlobnega_snopa: Math.cos(Math.PI/4),
     // Faktor usmerjenosti svetlobe - zmanjšan za bolj razpršeno svetlobo
-    faktor_usmerjenosti: 30,
+    faktor_usmerjenosti: 20,
 }));
 
 
