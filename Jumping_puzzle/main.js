@@ -12,6 +12,7 @@ import { Player } from './game/Player.js';
 import { AudioController } from 'engine/controllers/AudioController.js';
 const audioController = new AudioController('./audio/test.mp3');
 
+
 import {
     calculateAxisAlignedBoundingBox,
     mergeAxisAlignedBoundingBoxes,
@@ -49,45 +50,14 @@ light.addComponent(new Light({
     faktor_usmerjenosti: 20,
 }));
 
+
+
 camera.addComponent(new FirstPersonController(camera, canvas));
 camera.isDynamic = true;
 camera.aabb = {
     min: [-0.5, -0.5, -0.5],
     max: [0.5, 0.5, 0.5],
 };
-
-function goToMainScreen() {
-    const cameraTransform = camera.getComponentOfType(Transform);
-    if (cameraTransform) {
-        // Update camera position
-        cameraTransform.translation[1] = 50; // Set y coordinate
-        cameraTransform.translation[2] = 49; // Set z coordinate
-    }
-
-    console.log("Navigating to the main menu...");
-
-    // Transition from game to the menu
-    const menu = document.getElementById('loading-menu');
-    const gameInterface = document.getElementById('game-interface');
-
-    // Fade out game interface
-    gameInterface.style.transition = 'opacity 1.5s ease-in-out';
-    gameInterface.style.opacity = '0';
-
-    // Fade in menu after the game interface fades out
-    setTimeout(() => {
-        gameInterface.style.display = 'none'; // Hide game interface
-        menu.style.display = 'block'; // Show menu
-        menu.style.opacity = '1'; // Make it fully visible
-    }, 1500);
-}
-
-// Trigger with key press
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'm') {
-        goToMainScreen();
-    }
-});
 
 // Extract all node names except for cameras and lights
 const staticNodes = loader.gltf.nodes
@@ -110,24 +80,33 @@ scene.traverse(node => {
     node.aabb = mergeAxisAlignedBoundingBoxes(boxes);
 });
 
-// Create an HTML element to display the camera position
 const positionDisplay = document.createElement('div');
 positionDisplay.style.position = 'absolute';
 positionDisplay.style.top = '10px';
 positionDisplay.style.left = '10px';
 positionDisplay.style.color = 'white';
-positionDisplay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-positionDisplay.style.padding = '5px';
+positionDisplay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+positionDisplay.style.border = '2px solid #4CAF50'; // Green border for better visibility
+positionDisplay.style.borderRadius = '10px'; // Rounded corners
+positionDisplay.style.boxShadow = '0px 4px 6px rgba(0, 0, 0, 0.3)'; // Add shadow for depth
+positionDisplay.style.padding = '8px 12px';
+positionDisplay.style.fontFamily = 'Arial, sans-serif';
+positionDisplay.style.fontSize = '14px';
 document.body.appendChild(positionDisplay);
 
-// Create an HTML element to display the timer
 const timerDisplay = document.createElement('div');
 timerDisplay.style.position = 'absolute';
 timerDisplay.style.top = '10px';
 timerDisplay.style.right = '10px';
 timerDisplay.style.color = 'white';
-timerDisplay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-timerDisplay.style.padding = '5px';
+timerDisplay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+timerDisplay.style.border = '2px solid #2196F3'; // Blue border for contrast
+timerDisplay.style.borderRadius = '10px'; // Rounded corners
+timerDisplay.style.boxShadow = '0px 4px 6px rgba(0, 0, 0, 0.3)'; // Add shadow for depth
+timerDisplay.style.padding = '8px 12px';
+timerDisplay.style.fontFamily = 'Arial, sans-serif';
+timerDisplay.style.fontSize = '14px';
+timerDisplay.innerHTML = '<strong>Time:</strong> 0s'; // Default text
 document.body.appendChild(timerDisplay);
 
 let startTime = null;
@@ -154,15 +133,7 @@ function update(time, dt) {
     const cameraTransform = camera.getComponentOfType(Transform);
     if (cameraTransform) {
         const { translation } = cameraTransform;
-        positionDisplay.textContent = `Camera position: x=${translation[0].toFixed(2)}, y=${translation[1].toFixed(2)}, z=${translation[2].toFixed(2)}`;
-
-        // ⇩⇩ New condition to trigger goToMainScreen ⇩⇩
-        if (
-            translation[1] >= 50 && translation[1] <= 53 &&
-            translation[2] >= 49.5 && translation[2] <= 53
-        ) {
-            goToMainScreen();
-        }
+        positionDisplay.textContent = `Camera position: x = ${translation[0].toFixed(2)}, y = ${translation[1].toFixed(2)}, z = ${translation[2].toFixed(2)}`;
     }
 
     physics.update(time, dt);
