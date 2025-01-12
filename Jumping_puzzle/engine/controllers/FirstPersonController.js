@@ -83,46 +83,56 @@ export class FirstPersonController {
 
     // If no input, apply decay to slow down
     if (!this.keys['KeyW'] && !this.keys['KeyS'] && !this.keys['KeyD'] && !this.keys['KeyA']) {
-      const decayFactor = Math.exp(dt * Math.log(1 - this.decay));
-      vec3.scale(this.velocity, this.velocity, decayFactor);
+        const decayFactor = Math.exp(dt * Math.log(1 - this.decay));
+        vec3.scale(this.velocity, this.velocity, decayFactor);
     }
 
     // Limit horizontal speed
     const speed = vec3.length(this.velocity);
     if (speed > this.maxSpeed) {
-      vec3.scale(this.velocity, this.velocity, this.maxSpeed / speed);
+        vec3.scale(this.velocity, this.velocity, this.maxSpeed / speed);
     }
 
     // Gravity for jumping/falling
     if (!this.isOnGround) {
-      this.verticalVelocity += this.gravity * dt;
+        this.verticalVelocity += this.gravity * dt;
     }
 
     // Get transform component to move/rotate our camera or object
     const transform = this.node.getComponentOfType(Transform);
     if (transform) {
-      // Horizontal movement
-      vec3.scaleAndAdd(transform.translation, transform.translation, this.velocity, dt);
+        // Horizontal movement
+        vec3.scaleAndAdd(transform.translation, transform.translation, this.velocity, dt);
 
-      // Vertical movement
-      transform.translation[1] += this.verticalVelocity * dt;
+        // Vertical movement
+        transform.translation[1] += this.verticalVelocity * dt;
 
-      // Instead of transform.translation[1] <= 0, do:
-      const cameraFloorY = 0;
+        // Check if the player is below y = 2
+        if (transform.translation[1] <= 2) {
+            console.log(transform.translation[1]);
+            transform.translation[0] = 7.36;
+            transform.translation[1] = 8.97;
+            transform.translation[2] = 6.93;
+            this.verticalVelocity = 0;
+            this.isOnGround = true;
+        }
 
-      if (transform.translation[1] <= cameraFloorY) {
-        transform.translation[1] = cameraFloorY;
-        this.verticalVelocity = 0;
-        this.isOnGround = true;
-      }
+        // Instead of transform.translation[1] <= 0, do:
+        const cameraFloorY = 0;
 
-      // Update rotation from pitch/yaw
-      const rotation = quat.create();
-      quat.rotateY(rotation, rotation, this.yaw);
-      quat.rotateX(rotation, rotation, this.pitch);
-      transform.rotation = rotation;
+        if (transform.translation[1] <= cameraFloorY) {
+            transform.translation[1] = cameraFloorY;
+            this.verticalVelocity = 0;
+            this.isOnGround = true;
+        }
+
+        // Update rotation from pitch/yaw
+        const rotation = quat.create();
+        quat.rotateY(rotation, rotation, this.yaw);
+        quat.rotateX(rotation, rotation, this.pitch);
+        transform.rotation = rotation;
     }
-  }
+}
 
   pointermoveHandler(e) {
     // Mouse look
