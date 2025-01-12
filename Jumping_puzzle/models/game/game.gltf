@@ -1,14 +1,32 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.69",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_texture_transform"
+		"KHR_texture_transform",
+		"KHR_lights_punctual"
 	],
 	"extensionsRequired":[
-		"KHR_texture_transform"
+		"KHR_texture_transform",
+		"KHR_lights_punctual"
 	],
+	"extensions":{
+		"KHR_lights_punctual":{
+			"lights":[
+				{
+					"color":[
+						1,
+						0.9219988584518433,
+						0.5332366228103638
+					],
+					"intensity":5464,
+					"type":"directional",
+					"name":"Sun"
+				}
+			]
+		}
+	},
 	"scene":0,
 	"scenes":[
 		{
@@ -84,7 +102,8 @@
 				67,
 				68,
 				69,
-				70
+				70,
+				71
 			]
 		}
 	],
@@ -1426,6 +1445,25 @@
 				-3.327834367752075,
 				0
 			]
+		},
+		{
+			"extensions":{
+				"KHR_lights_punctual":{
+					"light":0
+				}
+			},
+			"name":"Sun",
+			"rotation":[
+				-0.7071068286895752,
+				0,
+				0,
+				0.7071068286895752
+			],
+			"translation":[
+				0,
+				166.02178955078125,
+				0
+			]
 		}
 	],
 	"cameras":[
@@ -1554,9 +1592,16 @@
 			}
 		},
 		{
+			"alphaMode":"BLEND",
 			"doubleSided":true,
 			"name":"Material.023",
 			"pbrMetallicRoughness":{
+				"baseColorFactor":[
+					1,
+					1,
+					1,
+					0.2772727608680725
+				],
 				"baseColorTexture":{
 					"index":8
 				},
