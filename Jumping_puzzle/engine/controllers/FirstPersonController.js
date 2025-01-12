@@ -15,7 +15,6 @@ export class FirstPersonController {
       pointerSensitivity = 0.002,
       gravity = -9.81,
       jumpSpeed = 5,
-
     } = {}
   ) {
     this.node = node;
@@ -108,15 +107,14 @@ export class FirstPersonController {
       // Vertical movement
       transform.translation[1] += this.verticalVelocity * dt;
 
-    // Instead of transform.translation[1] <= 0, do:
-    const cameraFloorY = 8.974434852600098;
+      // Instead of transform.translation[1] <= 0, do:
+      const cameraFloorY = 8.974434852600098;
 
-    if (transform.translation[1] <= cameraFloorY) {
-    transform.translation[1] = cameraFloorY;
-    this.verticalVelocity = 0;
-    this.isOnGround = true;
-    }
-
+      if (transform.translation[1] <= cameraFloorY) {
+        transform.translation[1] = cameraFloorY;
+        this.verticalVelocity = 0;
+        this.isOnGround = true;
+      }
 
       // Update rotation from pitch/yaw
       const rotation = quat.create();
@@ -144,7 +142,7 @@ export class FirstPersonController {
     this.keys[e.code] = true;
     // Jump if Space is pressed and we're on ground
     if (e.code === 'Space' ) {
-      this.verticalVelocity = this.jumpSpeed+10;
+      this.verticalVelocity = this.jumpSpeed;
       this.isOnGround = false;
     }
   }
