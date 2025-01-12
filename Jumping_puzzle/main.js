@@ -34,7 +34,7 @@ camera.aabb = {
 
 // Extract all node names except for cameras and lights
 const staticNodes = loader.gltf.nodes
-    .filter(node => !node.camera && !node.light)
+    .filter(node => !node.camera && !node.extensions)
     .map(node => node.name);
 
 // Load and set static property for each node
