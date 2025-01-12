@@ -1,3 +1,22 @@
+// AudioController.js
+class AudioController {
+    constructor(audioFilePath) {
+        this.audio = document.createElement('audio');
+        this.audio.src = audioFilePath;
+        this.audio.loop = true;
+        this.audio.autoplay = false;  // Disable autoplay initially
+
+        this.audio.addEventListener('canplaythrough', () => {
+            console.log('Audio is ready to play.');
+        });
+
+        this.audio.addEventListener('error', (e) => {
+            console.error('Audio failed to load:', e);
+        });
+
+        document.body.appendChild(this.audio);
+    }
+}
 // Handle Next Button Click
 document.getElementById('next-button').addEventListener('click', () => {
     const infoBox = document.getElementById('info-box');
@@ -29,6 +48,10 @@ document.getElementById('play-button').addEventListener('click', () => {
         menu.style.display = 'none';
         gameInterface.style.opacity = '1'; // Fade in gameplay
     }, 1500);
+    const audioController = new AudioController('./audio/test.mp3');
+    audioController.audio.play().catch((error) => {
+        console.error('Audio playback failed:', error);
+    });
 });
 
 // Cloud generation logic

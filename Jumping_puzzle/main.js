@@ -9,6 +9,10 @@ import { FirstPersonController } from 'engine/controllers/FirstPersonController.
 import { Camera, Model, Transform, Light, Node } from 'engine/core.js';
 import { Player } from './game/Player.js';
 
+import { AudioController } from 'engine/controllers/AudioController.js';
+const audioController = new AudioController('./audio/test.mp3');
+
+
 import {
     calculateAxisAlignedBoundingBox,
     mergeAxisAlignedBoundingBoxes,
